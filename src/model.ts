@@ -1,54 +1,44 @@
-import { Group, User } from "@/shared";
-import { groupBy } from "lodash";
+import { getAgeGroups, getGenderGroups } from "@/lib/utils";
+import { Group, User, appStarted, getUsersEffect } from "@/shared";
+import { createEvent, createStore, sample } from "effector";
 
-export const getGenderGroups = (users: User[]): Group[] => {
-  const groups = groupBy(users, (user) => user.gender);
-  return Object.keys(groups).map((key) => ({
-    category: key,
-    count: groups[key].length,
-  }));
-};
+export const refetchUsersEvent = createEvent<void>();
 
-export const getAgeGroups = (
-  users: User[],
-  ageRanges: number[] = [11, 21, 31, 41, 51],
-): Group[] => {
-  const groupByAge = (users: User[], ageRanges: number[]) => {
-    const labels = ageRanges
-      .filter((range) => range > ageRanges[0])
-      .map((range) => {
-        const lower = range - 10;
-        const upper = range - 1;
-        return `${lower}-${upper}`;
-      });
+export const $users = createStore<User[]>([]);
+export const $usersCount = createStore(20);
 
-    const groups = groupBy(users, (user) => {
-      const age = user.dob.age;
-      const range = ageRanges.find((range) => age < range - 1);
-      return range
-        ? `${range - 10}-${range - 1}`
-        : `${ageRanges[ageRanges.length - 1]}+`;
-    });
+export const $loading = getUsersEffect.pending;
+export const $error = getUsersEffect.failData;
 
-    labels.forEach((label) => {
-      if (!groups[label]) {
-        // @ts-ignore
-        groups[label] = 0;
-      }
-    });
-    return groups;
-  };
+export const $ageGroups = createStore<Group[]>([]);
+export const $genderGroups = createStore<Group[]>([]);
 
-  const ageGroups = groupByAge(users, ageRanges);
+sample({
+  clock: appStarted,
+  source: $usersCount,
+  target: getUsersEffect,
+});
 
-  return Object.keys(ageGroups)
-    .map((key) => ({
-      category: key,
-      count: ageGroups[key].length || 0,
-    }))
-    .sort((a, b) => {
-      const aRange = a.category.split("-").map((n) => parseInt(n, 10));
-      const bRange = b.category.split("-").map((n) => parseInt(n, 10));
-      return aRange[0] - bRange[0];
-    });
-};
+sample({
+  clock: getUsersEffect.doneData,
+  fn: (users) => users.results,
+  target: $users,
+});
+
+sample({
+  source: $users,
+  fn: getAgeGroups,
+  target: $ageGroups,
+});
+
+sample({
+  source: $users,
+  fn: getGenderGroups,
+  target: $genderGroups,
+});
+
+sample({
+  clock: refetchUsersEvent,
+  source: $usersCount,
+  target: getUsersEffect,
+});
