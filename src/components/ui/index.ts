@@ -6,5 +6,3 @@ export * from "./separator";
 export * from "./skeleton";
 export * from "./info-block";
 export * from "./category";
-export * from "./header";
-export * from "./user-card";

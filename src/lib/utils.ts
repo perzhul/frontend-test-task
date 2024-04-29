@@ -57,3 +57,22 @@ export const getAgeGroups = (users: User[]): Group[] => {
       return aRange[0] - bRange[0];
     });
 };
+
+export const removeUser = (users: User[], userToRemove: User): User[] => {
+  return users.filter((user) => user.login.uuid !== userToRemove.login.uuid);
+};
+
+const normalizeString = (input: string): string => {
+  return input.toLowerCase().trim();
+};
+
+const userToString = (user: User): string => {
+  const { name, email, phone, cell, dob, location } = user;
+  const userInfo = `${name.first} ${name.last} ${email} ${phone} ${cell} ${dob.age} ${location.city} ${location.country}`;
+  return normalizeString(userInfo);
+};
+
+export const filterUsers = (users: User[], searchString: string): User[] => {
+  const searchNormalized = normalizeString(searchString);
+  return users.filter((user) => userToString(user).includes(searchNormalized));
+};

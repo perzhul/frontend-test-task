@@ -22,6 +22,7 @@ export default {
         secondary: "#8C8988",
         accent: "#CF7B5A",
         error: "#FF2C47",
+        "active-card-border": "#CF7B5A33",
       },
       backgroundColor: {
         brightGray: "#4B4E5B",
