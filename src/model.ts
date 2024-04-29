@@ -14,7 +14,7 @@ export const userRemoved = createEvent<User>();
 export const $users = createStore<User[]>([]);
 export const $filteredUsers = createStore<User[]>([]);
 
-const DEFAULT_USERS_COUNT = 5;
+const DEFAULT_USERS_COUNT = 500;
 export const $usersCount = createStore(DEFAULT_USERS_COUNT);
 export const $filteredUsersCount = $filteredUsers.map((users) => users.length);
 
