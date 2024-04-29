@@ -8,7 +8,7 @@ import {
 } from "@/components";
 import { parseDate } from "@/lib/dayjs";
 import { cn } from "@/lib/utils";
-import { $loading, userRemoved } from "@/model";
+import { userRemoved } from "@/model";
 import { User } from "@/shared";
 import { useUnit } from "effector-react";
 import React from "react";
@@ -29,23 +29,18 @@ export const UserCard: React.FC<CardProps> = ({ className, user }) => {
     userRemoved,
   ]);
 
-  const [isLoading] = useUnit([$loading]);
-
   const isSelected = login.uuid === selectedUser?.login.uuid;
   const activeStyles = "outline-active-card-border outline";
 
   const handleFocus = () => selectUser(user);
   const handleBlur = () => deselectUser(user);
   const handleClick = () => removeUser(user);
-  console.log(isLoading);
-
-  if (isLoading) return <UserCardSkeleton />;
 
   return (
     <div
       tabIndex={0}
       className={cn(
-        "w-[332px] m-2 rounded-2xl bg-primary p-5 text-primary relative focus:outline-white focus:outline-w-[1px] ",
+        "w-[332px] rounded-2xl bg-primary p-5 text-primary relative",
         className,
         isSelected && activeStyles,
       )}
@@ -90,7 +85,7 @@ export const UserCard: React.FC<CardProps> = ({ className, user }) => {
   );
 };
 
-const UserCardSkeleton: React.FC = () => {
+export const UserCardSkeleton: React.FC = () => {
   return (
     <Skeleton className="w-[332px] m-2 bg-primary rounded-2xl h-[190px] p-5">
       <div className="flex w-full mb-4 items-center">
