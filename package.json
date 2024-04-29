@@ -18,6 +18,7 @@
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.11",
     "effector": "^23.2.1",
     "effector-react": "^23.2.0",
     "lodash": "^4.17.21",

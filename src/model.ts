@@ -1,5 +1,4 @@
-import { Group } from "./app";
-import { User } from "./shared/api";
+import { Group, User } from "@/shared";
 import { groupBy } from "lodash";
 
 export const getGenderGroups = (users: User[]): Group[] => {
