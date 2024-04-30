@@ -79,7 +79,6 @@ sample({
 
 sample({
   clock: getUsersFx.doneData,
-  fn: (users) => users.results,
   target: [$users, $filteredUsers],
 });
 
