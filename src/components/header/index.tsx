@@ -2,6 +2,7 @@ import { Button, Input } from "@/components";
 import { useUnit } from "effector-react";
 import { $searchValue, searchValueChanged } from "./model";
 import { usersRefreshed } from "@/model";
+import { DEFAULT_USERS_COUNT } from "@/shared";
 
 export const Header: React.FC = () => {
   const [searchValue, onChange, onClick] = useUnit([
@@ -19,7 +20,11 @@ export const Header: React.FC = () => {
           value={searchValue}
           onChange={(e) => onChange(e.target.value)}
         />
-        <Button onClick={onClick} className="text-accent" variant="ghost">
+        <Button
+          onClick={() => onClick(DEFAULT_USERS_COUNT)}
+          className="text-accent"
+          variant="ghost"
+        >
           Refresh Users
         </Button>
       </nav>
