@@ -13,7 +13,7 @@ import {
 } from "@/shared";
 import { createEvent, createStore, sample } from "effector";
 import { searchValueChanged } from "./components/header/model";
-import { debounce } from "patronum";
+import { debounce, spread } from "patronum";
 
 const DEBOUNCE_TIMEOUT_IN_MS = 200;
 
@@ -72,13 +72,13 @@ sample({
 });
 
 sample({
-  source: $filteredUsers,
-  fn: getAgeGroups,
-  target: $ageGroups,
-});
-
-sample({
-  source: $filteredUsers,
-  fn: getGenderGroups,
-  target: $genderGroups,
+  clock: $filteredUsers,
+  fn: (users) => ({
+    ageGroups: getAgeGroups(users),
+    genderGroups: getGenderGroups(users),
+  }),
+  target: spread({
+    ageGroups: $ageGroups,
+    genderGroups: $genderGroups,
+  }),
 });
