@@ -1,11 +1,5 @@
-import { createEvent, createStore } from "effector";
-import { reset } from "patronum";
+import { createEvent, restore } from "effector";
 
 export const searchValueChanged = createEvent<string>();
 
-export const $searchValue = createStore<string>("").on(
-  searchValueChanged,
-  (_, value) => value,
-);
-
-export const resetSearchValue = reset({ target: [$searchValue] });
+export const $searchValue = restore(searchValueChanged, "");

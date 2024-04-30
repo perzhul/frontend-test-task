@@ -28,7 +28,9 @@ debounce({
 export const userRemoved = createEvent<User>();
 
 export const $users = createStore<User[]>([]);
-export const $filteredUsers = createStore<User[]>([]);
+export const $filteredUsers = createStore<User[]>([]).on($users, (state) => {
+  return state;
+});
 
 export const $usersCount = createStore(DEFAULT_USERS_COUNT);
 export const $filteredUsersCount = $filteredUsers.map((users) => users.length);
@@ -40,30 +42,14 @@ export const $loading = getUsersFx.pending;
 export const $error = getUsersFx.failData;
 
 sample({
+  clock: appStarted,
+  source: $usersCount,
+  target: getUsersFx,
+});
+
+sample({
   clock: getUsersFx.doneData,
-  fn: () => "",
-  target: searchValueChanged,
-});
-
-sample({
-  clock: userRemoved,
-  source: $users,
-  fn: removeUser,
   target: $users,
-});
-
-sample({
-  clock: userRemoved,
-  source: $filteredUsers,
-  fn: removeUser,
-  target: $filteredUsers,
-});
-
-sample({
-  clock: userRemoved,
-  source: $users,
-  fn: (users) => users.length,
-  target: $usersCount,
 });
 
 sample({
@@ -74,14 +60,16 @@ sample({
 });
 
 sample({
-  clock: appStarted,
-  source: $usersCount,
-  target: getUsersFx,
+  clock: userRemoved,
+  source: $users,
+  fn: removeUser,
+  target: $users,
 });
 
 sample({
-  clock: getUsersFx.doneData,
-  target: [$users, $filteredUsers],
+  clock: $users,
+  fn: () => "",
+  target: searchValueChanged,
 });
 
 sample({
