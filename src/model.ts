@@ -32,7 +32,6 @@ export const $filteredUsers = createStore<User[]>([]).on($users, (state) => {
   return state;
 });
 
-export const $usersCount = createStore(DEFAULT_USERS_COUNT);
 export const $filteredUsersCount = $filteredUsers.map((users) => users.length);
 
 export const $ageGroups = createStore<Group[]>([]);
@@ -43,7 +42,7 @@ export const $error = getUsersFx.failData;
 
 sample({
   clock: appStarted,
-  source: $usersCount,
+  fn: () => DEFAULT_USERS_COUNT,
   target: getUsersFx,
 });
 
