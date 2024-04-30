@@ -87,7 +87,7 @@ export const UserCard: React.FC<CardProps> = ({ className, user }) => {
 
 export const UserCardSkeleton: React.FC = () => {
   return (
-    <Skeleton className="w-[332px] m-2 bg-primary rounded-2xl h-[190px] p-5">
+    <Skeleton className="w-[332px] bg-primary rounded-2xl h-[190px] p-5">
       <div className="flex w-full mb-4 items-center">
         <div className="mr-2">
           <Skeleton className="h-14 w-14 rounded-full bg-secondary" />
